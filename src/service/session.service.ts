@@ -1,7 +1,7 @@
 import Session, {SessionDocument} from "../model/session.model";
 import {UserDocument} from "../model/user.model";
 import {LeanDocument, FilterQuery, UpdateQuery} from "mongoose";
-import config from 'config';
+import "dotenv/config"
 import {get} from "lodash";
 import {findUser} from "./user.service";
 import {decode, sign} from "../utils/jwt.utils";
@@ -22,7 +22,7 @@ export default function createAccessToken({user, session} : {
 }) {
     return sign(
         {...user, session: session._id},
-        {expiresIn: config.get('accessTokenTtl')}
+        {expiresIn: process.env.ACCESS_TOKEN_TTL}
     );
 }
 

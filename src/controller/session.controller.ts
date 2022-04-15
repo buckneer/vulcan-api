@@ -3,7 +3,7 @@ import {validatePassword} from "../service/user.service";
 import createAccessToken, {createSession, findSessions, updateSession} from "../service/session.service";
 import {UserDocument} from "../model/user.model";
 
-import config from "config";
+import "dotenv/config"
 import {sign} from "../utils/jwt.utils";
 import {get} from "lodash";
 
@@ -25,7 +25,7 @@ export async function createUserSessionHandler(request: Request, response: Respo
 
     // create refresh token
     const refreshToken = sign(session, {
-        expiresIn: config.get("refreshTokenTtl") // 1 year
+        expiresIn: process.env.REFRESH_TOKEN_TTL // 1 year
     });
 
 

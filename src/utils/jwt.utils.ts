@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import config from "config";
+require("dotenv").config();
 
-const privateKey = config.get("privateKey") as string;
+const privateKey = process.env.PRIVATE_KEY as string;
 
 
 export function sign(object: Object, options?: jwt.SignOptions | undefined) {

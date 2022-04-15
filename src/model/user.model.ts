@@ -1,6 +1,6 @@
 import {Document, model, Schema} from 'mongoose';
 import bcrypt from 'bcrypt';
-import config from 'config';
+import "dotenv/config"
 import Item, {ItemDocument} from "./item.model";
 
 
@@ -30,8 +30,8 @@ UserSchema.pre('save', async function(next: any) {
     let user = this as UserDocument;
 
     if(!user.isModified("password")) return next();
-
-    const salt = await bcrypt.genSalt(config.get("saltWorkFactor"));
+    let workFactor = parseInt(process.env.SALT_WORK_FACTOR as string) as number;
+    const salt = await bcrypt.genSalt(workFactor);
     user.password = bcrypt.hashSync(user.password, salt);
 
 
