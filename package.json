@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "NODE_ENV=production node dist/app.js",
+    "start": "node dist/app.js",
     "postinstall": "tsc",
-    "build": "NODE_ENV=production tsc",
-    "dev": "NODE_ENV=development nodemon --config nodemon.json src/app.ts"
+    "build": "tsc",
+    "dev": "nodemon --config nodemon.json src/app.ts"
   },
   "author": "Miftari Simel",
   "license": "ISC",
