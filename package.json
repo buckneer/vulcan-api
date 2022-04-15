@@ -2,12 +2,12 @@
   "name": "zeah",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node dist/src/index.js",
+    "start": "node dist/src/app.js",
     "postinstall": "tsc",
     "build": "tsc",
-    "dev": "nodemon --config nodemon.json src/index.ts"
+    "dev": "nodemon --config nodemon.json src/app.ts"
   },
   "author": "Miftari Simel",
   "license": "ISC",
@@ -45,7 +45,7 @@
     "typescript": "^4.6.3"
   },
   "engines" : {
-    "npm" : "7.0.0",
+    "npm" : "8.7.0",
     "node" : "16.0.0"
   }
 }
