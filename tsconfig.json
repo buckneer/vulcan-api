@@ -100,4 +100,5 @@
 
     "outDir": "dist/"
   },
+  "include": ["src/**/*", "config/*"]
 }
