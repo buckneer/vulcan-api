@@ -3,6 +3,8 @@ import {Request, Response} from "express";
 import {get, omit} from "lodash";
 import log from "../logger";
 import {UserDocument} from "../model/user.model";
+
+
 export async function createUserHandler(req: Request, res: Response) {
     try {
         const user = await createUser(req.body);
