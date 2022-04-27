@@ -10,7 +10,6 @@ export const createItemSchema = object({
     body: object({
         name: string().required("Name is required"),
         price: string().required("Price is required"),
-        description: string().required("Description is required"),
         category: string().required("Category is required")
     })
 })

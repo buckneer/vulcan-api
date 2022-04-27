@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {get} from "lodash";
-import {addToCart, clearCart, getCart, removeFromCart} from "../service/cart.service";
+import {get, omit} from "lodash";
+import {addToCart, checkout, clearCart, getCart, removeFromCart} from "../service/cart.service";
 import log from "../logger";
 
 
@@ -38,6 +38,20 @@ export async function removeFromCartHandler(req: Request, res: Response) {
 
         let cart = await removeFromCart(user, item);
         return res.send(cart.toJSON());
+    } catch (error: any) {
+        log.error(error.message);
+        return res.status(409).send(error.message)
+    }
+}
+
+export async function checkoutHandler(req: Request, res: Response) {
+    try {
+        let userId = get(req, "user._id");
+        let {user,valid} = await checkout(userId);
+
+        if(!valid) return res.send({"message": "Not enough coins"})
+
+        return res.send(omit(user?.toJSON(), "password"));
     } catch (error: any) {
         log.error(error.message);
         return res.status(409).send(error.message)

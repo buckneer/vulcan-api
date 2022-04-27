@@ -15,7 +15,13 @@ import {
     getItemsByCategoryHandler,
     handleBuyItem
 } from "./controller/item.controller";
-import {addToCartHandler, clearCartHandler, getCartHandler, removeFromCartHandler} from "./controller/cart.controller";
+import {
+    addToCartHandler,
+    checkoutHandler,
+    clearCartHandler,
+    getCartHandler,
+    removeFromCartHandler
+} from "./controller/cart.controller";
 import {itemToCart} from "./schema/cart.schema";
 
 
@@ -38,7 +44,8 @@ export default function(app: Express) {
 
 
     // shopping cart
-    app.get("/api/cart", requiresUser, getCartHandler)
+    app.get("/api/cart", requiresUser, getCartHandler);
+    app.get("/api/cart/checkout", requiresUser, checkoutHandler);
     app.post("/api/cart", [validateRequest(itemToCart), requiresUser], addToCartHandler);
     app.delete("/api/cart", [validateRequest(itemToCart), requiresUser], removeFromCartHandler);
     app.delete("/api/clear", requiresUser, clearCartHandler);

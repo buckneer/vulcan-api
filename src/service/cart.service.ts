@@ -1,12 +1,38 @@
 import Cart, {CartDocument} from "../model/cart.model";
-import {DocumentDefinition} from "mongoose";
-import log from "../logger";
+import {buyItem} from "./item.service";
+import User, {UserDocument} from "../model/user.model";
+import {ItemDocument} from "../model/item.model";
 
+
+export async function createCart(userId: string) {
+
+}
 
 export async function getCart(userId: string) {
     try {
-        let userCart = await Cart.findOne({user: userId}) as CartDocument;
-        return userCart.populate("user");
+
+        // Check if user has cart
+
+        // If yes, return cart,
+        // If not, create a new cart
+        let userCart = await Cart.findOne({user: userId}).populate("items") as CartDocument;
+        if(!userCart) {
+            let data : {
+                user: string,
+                items: ItemDocument[];
+            } = {
+                user: userId,
+                items: []
+            }
+
+            await Cart.create(data)
+
+            userCart = await Cart.findOne({user: userId}).populate("items") as CartDocument;
+        }
+        // TODO remove log
+
+
+        return userCart;
     } catch (error: any) {
         throw new Error(error);
     }
@@ -20,6 +46,43 @@ export async function addToCart(userId: string, itemId: string) {
     } catch (error: any) {
         throw new Error(error);
     }
+}
+
+export async function checkout(userId: string) {
+
+
+    try {
+        let userCart = await Cart.findOne({user: userId}).populate("items") as CartDocument;
+        let user = await User.findOne({_id: userId}).populate("items") as UserDocument;
+        let total = 0;
+
+        userCart.items.map(item => {
+            total += parseInt(item.price);
+        })
+
+        if(total > user.zeahCoins) {
+            return {user, valid: false}
+        }
+        // Deduct coins from user's account
+        user.zeahCoins -= total;
+
+
+        // Add items to account
+        user.items.push.apply(user.items, userCart.items)
+        await user.save();
+
+        // Clear the cart
+        userCart.items = []
+        await userCart.save()
+
+        return {user, valid: true};
+
+
+
+    } catch (error: any) {
+        throw new Error(error);
+    }
+
 }
 
 export async function removeFromCart(userId: string, itemId: string) {
