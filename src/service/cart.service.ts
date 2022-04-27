@@ -29,7 +29,6 @@ export async function getCart(userId: string) {
 
             userCart = await Cart.findOne({user: userId}).populate("items") as CartDocument;
         }
-        // TODO remove log
 
 
         return userCart;
