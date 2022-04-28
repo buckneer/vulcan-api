@@ -12,6 +12,7 @@ export interface UserDocument extends Document {
     items: ItemDocument['_id'][];
     createdAt: Date;
     updatedAt: Date;
+    role: string
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -21,6 +22,7 @@ const UserSchema = new Schema(
         name: { type: String, required: true },
         password: { type: String, required: true },
         zeahCoins: {type: Number, default: "0"},
+        role: {type: String, default: "user"},
         items: [{type: Schema.Types.ObjectId, ref: "Item"}]
     },
     { timestamps: true }

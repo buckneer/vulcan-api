@@ -21,17 +21,27 @@ export async function getItemsByCategory(query: FilterQuery<ItemDocument>) {
     }
 }
 
-export async function addItem(input: DocumentDefinition<ItemDocument>) {
+export async function addItem(input: DocumentDefinition<ItemDocument>, userId: string) {
     try {
-        return await Item.create(input);
+        let user = await User.findOne({_id: userId}) as UserDocument;
+        if(user.role === "admin") {
+            return Item.create(input);
+        } else {
+            return null;
+        }
     } catch (e: any) {
         throw new Error(e);
     }
 }
 
-export async function deleteItem(itemId: string) {
+export async function deleteItem(itemId: string, userId: string) {
     try {
-        return await Item.deleteOne({_id: itemId});
+        let user = await User.findOne({_id: userId}) as UserDocument;
+        if(user.role === "admin") {
+            return await Item.deleteOne({_id: itemId});
+        } else {
+            return null;
+        }
     } catch (e: any) {
         throw new Error(e)
     }

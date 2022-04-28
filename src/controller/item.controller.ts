@@ -47,8 +47,14 @@ export async function getItemsByCategoryHandler(req: Request, res: Response) {
 
 export async function addItemHandler(req: Request, res: Response) {
     try {
-        let item = await addItem(req.body) as ItemDocument;
-        return res.send(item.toJSON());
+        let user = get(req, "user._id");
+        let item = await addItem(req.body, user) as ItemDocument;
+        if(item) {
+            return res.send(item.toJSON());
+        } else {
+            return res.send({"message": "You're not admin"})
+        }
+
     } catch (error: any) {
         log.error(error.message);
         return res.status(409).send(error.message)
@@ -57,9 +63,16 @@ export async function addItemHandler(req: Request, res: Response) {
 
 export async function deleteItemHandler(req: Request, res: Response) {
     try {
+
+        let user = get(req, "user._id");
         let itemId = req.body.itemId;
-        await deleteItem(itemId);
-        return res.sendStatus(200)
+        let item = await deleteItem(itemId, user);
+        if(item) {
+            return res.sendStatus(200)
+        } else {
+            return res.send({"message": "You're not admin"})
+        }
+
     } catch (error: any) {
         log.error(error.message);
         return res.status(409).send(error.message)
