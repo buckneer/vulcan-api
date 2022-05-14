@@ -2,6 +2,8 @@ import Cart, {CartDocument} from "../model/cart.model";
 import {buyItem} from "./item.service";
 import User, {UserDocument} from "../model/user.model";
 import {ItemDocument} from "../model/item.model";
+import {create, StoreItem} from "../model/storeitem.model";
+import "dotenv/config"
 
 
 export async function createCart(userId: string) {
@@ -68,6 +70,27 @@ export async function checkout(userId: string) {
 
         // Add items to account
         user.items.push.apply(user.items, userCart.items)
+
+        userCart.items.map(item => {
+            let newItem : StoreItem = {
+                id: 1,
+                item_name: item.name,
+                username: user.name,
+                payment_method: "paypal"
+            }
+
+            create(newItem, (err: Error, storeItem: number) => {
+                if(err) {
+                    return {user, valid: false}
+                }
+            })
+
+
+
+
+            console.log(newItem);
+        })
+
         await user.save();
 
         // Clear the cart
